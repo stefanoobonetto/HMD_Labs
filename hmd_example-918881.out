@@ -1,0 +1,9 @@
+
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]
+Loading checkpoint shards:  50%|█████     | 1/2 [00:05<00:05,  5.19s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:06<00:00,  2.94s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:06<00:00,  3.28s/it]
+Some parameters are on the meta device device because they were offloaded to the cpu.
+ Hello! Welcome to our pizza ordering service! *adjusts glasses* What can I get for you today? 🍕👀
+
+Would you like a classic margherita or something more adventurous like the "Meat Lover's Delight"? Or maybe you're in the mood for something different? We have a variety of crust options
