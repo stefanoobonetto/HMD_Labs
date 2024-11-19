@@ -1,0 +1,6 @@
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:08<00:08,  8.77s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:10<00:00,  4.82s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:10<00:00,  5.41s/it]
+Some parameters are on the meta device device because they were offloaded to the cpu.
+ Sure, here are ten examples of requests from clients that want to order a pizza:
+
+1. "Can I please order a large pepperoni pizza with extra cheese and peppers?"
+2. "I would like to order a veggie pizza with mushrooms, onions, and bell peppers, and can I get a side of

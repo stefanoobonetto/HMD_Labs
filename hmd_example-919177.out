@@ -1,0 +1,16 @@
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:08<00:08,  8.43s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:10<00:00,  4.87s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:10<00:00,  5.41s/it]
+Some parameters are on the meta device device because they were offloaded to the cpu.
+ Sure, here are ten examples of requests from clients that want to order a pizza:
+
+1. "I'd like to order a large pepperoni pizza with extra cheese and pepperonis."
+2. "Can I get a veggie pizza with mushrooms, onions, and bell peppers? And can you make sure the crust is gluten-free?"
+3. "I'd like to place an order for a meat lovers pizza with sausage, bacon, and ham."
+4. "Can you deliver a pizza to my office? I'd like to order a supreme pizza with everything on it."
+5. "I'd like to order a small cheese pizza with extra sauce."
+6. "Can you make sure the pizza is cooked well done and delivered to my house by 7pm?"
+7. "I'd like to order a Hawaiian pizza with ham and pineapple."
+8. "Can you give me a quote for a pizza party for 10 people? What toppings can I choose from?"
+9. "I'd like to order a pizza with a unique topping, can I get a garlic butter and herb crust?"
+10. "Can you deliver a pizza to my friend's house? I'd like to order a BBQ chicken pizza with extra sauce."
+
+These are just a few examples of the types of requests you might receive from clients when ordering a pizza. You can use these examples to train your pizza bot and help it understand the different types of orders and requests it may encounter.
