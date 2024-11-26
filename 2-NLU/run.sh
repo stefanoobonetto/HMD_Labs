@@ -13,3 +13,5 @@ if [ ! -f "$PROMPT_FILE" ]; then
 fi
 
 sbatch example.sbatch --system-prompt "$(cat "$PROMPT_FILE")" llama2 "I want a cheese pizza" --max_seq_length 1000
+
+# --reservation=hmd-2024-wed: This is the reservation name for the HMD cluster. You can change it to your own reservation name.

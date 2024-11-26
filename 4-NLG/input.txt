@@ -1,0 +1,19 @@
+{
+    "NLU" : {
+        intent : "ramen_ordering", 
+        slots : {
+            brooth : "as_side",
+            spaghetti_type : "weath_noodles", 
+            ham_on_top : null,
+            egg : "none",
+            mushrooms : null,
+            spring_onion : null,
+            bamboo_shoots : null,
+            carrots : null,
+            seaweed : null 
+        }
+    },
+    "DM" : {
+        "next_best_action" : "request_info(ham_on_top)"
+    }
+}

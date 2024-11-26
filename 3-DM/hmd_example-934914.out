@@ -1,0 +1,23 @@
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:11<00:11, 11.86s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:15<00:00,  7.08s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:15<00:00,  7.79s/it]
+Some parameters are on the meta device device because they were offloaded to the cpu.
+ Given the input JSON, the NLU component has identified the following slots with null values:
+
+* ham_on_top
+* egg
+* mushrooms
+* spring_onion
+* bamboo_shoots
+* carrots
+* seaweed
+
+Based on the above, I will generate the following actions:
+
+* request_info(ham_on_top)
+* request_info(egg)
+* request_info(mushrooms)
+* request_info(spring_onion)
+* request_info(bamboo_shoots)
+* request_info(carrots)
+* request_info(seaweed)
+
+These actions will prompt the user to provide the missing information for each slot.

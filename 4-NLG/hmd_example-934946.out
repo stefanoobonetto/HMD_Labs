@@ -1,0 +1,5 @@
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:08<00:08,  8.83s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:11<00:00,  5.06s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:11<00:00,  5.62s/it]
+Some parameters are on the meta device device because they were offloaded to the cpu.
+ Understood! Given the current state of the conversation, the Dialogue Manager has identified the next best action as "request_info(ham_on_top)". As the NLG component, I will generate a response for the user based on this action.
+
+"Excuse me, would you like to add ham on top of your ramen?"
