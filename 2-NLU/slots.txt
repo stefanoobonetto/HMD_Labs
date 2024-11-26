@@ -1,0 +1,5 @@
+Identify the user intent from this list: [pizza_ordering, pizza_delivery, flight_booking, drink_ordering]
+If the intent is pizza_ordering, extract the slots from the input of the user.
+The slots are: [pizza_size, pizza_type, pizza_count].
+If no values are present in the user input you have to put null as the value.
+Output them as a json.
