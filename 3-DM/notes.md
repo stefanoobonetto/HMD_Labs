@@ -246,4 +246,17 @@ This may be the inital input, the JSON that need to be fullfill:
 ```
 
 
+## PIPELINE
 
+1. User Input 
+2. [NLU component (Intent classification, slots' values extraction, **INFO EXTRACTION**)] 
+3. Meaningful rrepresentation --> [Dialogue Manager (NBA prediction, System action, **DECISION MAKING**)] 
+4. Next Best Action 
+5. NLG component (Response generation **LEXICALIZATION**)
+6. System Response
+
+Now let's build:
+
+user input --> req_for_info --> confirmation
+
+in an **automatic manner**.
