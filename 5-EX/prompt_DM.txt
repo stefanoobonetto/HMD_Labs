@@ -5,3 +5,17 @@ Given the input json of the NLU component, you should generate the best action t
 
 return your response updating the json file, adding an entry "DM" : { "next_best_action" : "request_info(<slot_name>)"} 
 for in the first case, or confirmation(intent) if in the second case.
+
+The final result will be something like this:
+
+{
+    "NLU": {
+        "intent": "ramen_ordering",
+        "slots": { ... }
+    },
+    "DM": {
+        "next_best_action": ...
+    }
+}
+
+where the NLU entry is the same as the input one and the DM one is the one you have to update.

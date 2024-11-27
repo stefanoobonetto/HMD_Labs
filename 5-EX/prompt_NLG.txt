@@ -5,3 +5,26 @@ Possible next best actions are:
 - confirmation(intent), confirm the task has been completed and the ramen has been ordered
 
 Please return only the question enclosed in quotation marks.
+
+
+You will receive a json file like the following:
+
+{
+    "NLU": {
+        "intent": "ramen_ordering",
+        "slots": { ... }
+    },
+    "DM": {
+        "next_best_action": ...
+    }
+}
+
+you will lexicalize the next_best_action given by the DM component.
+
+
+Consider the following values for the slots:
+
+broth : {null, "none", "pork", "chicken"}
+spaghetti_type : {null, "rice_noodles", "weath_noodles", "bucatini", "udon"},
+egg : {null, "no", "yes"},
+seaweed : {null, "yes", "no"}

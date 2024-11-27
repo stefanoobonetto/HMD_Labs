@@ -19,4 +19,3 @@ if [ ! -f "$INPUT_FILE" ]; then
 fi
 
 sbatch --account=hmd-2024 example.sbatch --system-prompt "$(cat "$PROMPT_FILE")" llama2  "$(cat "$INPUT_FILE")" --max_seq_length 1000
-

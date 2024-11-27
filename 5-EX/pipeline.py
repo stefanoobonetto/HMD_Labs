@@ -7,24 +7,14 @@ import time
 def run_bash_script(script_path, file1, file2):
     try:
         result = subprocess.run(['bash', script_path, file1, file2], check=True, text=True, capture_output=True)
-        print("Script output:")
+        # print("Script output:")
         return result.stdout
     except subprocess.CalledProcessError as e:
         print(f"Error occurred while running the script: {e}")
         print("Script error output:")
         print(e.stderr)
 
-import re
-import json
-import time
-
-import re
-import json
-import time
-
-def extract_dict_from_file(file_path, interval=2):
-   
-    print("Checking file content...")
+def extract_dict_from_file(file_path, interval=2): 
     while True:
         try:
             with open(file_path, 'r+') as f:
@@ -37,7 +27,7 @@ def extract_dict_from_file(file_path, interval=2):
                 )
                 
                 if match:
-                    print("Found dictionary:\n", match.group(0))
+                    # print("Found dictionary:\n", match.group(0))
                     dict_str = match.group(0)
                     
                     try:
@@ -55,7 +45,8 @@ def extract_dict_from_file(file_path, interval=2):
                     return dict_str  
 
         except Exception as e:
-            print(f"Error reading the file: {e}")
+            # print(f"Error reading the file: {e}")
+            pass
 
         time.sleep(interval)  
     return None
@@ -67,28 +58,23 @@ def search_output(output_NLU):
             return match.group(1)
     return None
 
-def extract_final_question(file_path, interval=2):
+def extract_final_question(file_path):
     while True:
         try:
-            with open(file_path, 'r') as f:  
+            with open(file_path, 'r') as f:
                 content = f.read()
-                print("Checking for question in NLG output...")
-
+                
                 match = re.search(r'"([^"]*)"', content)  
                 if match:
-                    question = match.group(1)  
-                    print(f"Found question: {question}")
-                    return question  
+                    sentence = match.group(1)  
+                    # print(f"Found sentence: {sentence}")
+                    return sentence
                 else:
-                    print("No question found yet, continuing to check...")
-
+                    # print("No sentence found between quotation marks.")
+                    continue
         except Exception as e:
-            print(f"Error reading the file: {e}")
-
-        time.sleep(interval)  
-    return None
-
-
+            # print(f"Error reading the file: {e}")
+            pass
 
 def main():
     bash_script_path = os.path.join(os.path.dirname(__file__), 'run.sh')
@@ -107,7 +93,7 @@ def main():
     path_output_NLU = None  
     if job_number:
         path_output_NLU = os.path.join(os.path.dirname(__file__), f'hmd_example-{job_number}.out')
-        
+        print(f"Checking NLU component's output... (on job {job_number})")
         dict_str_out_NLU = extract_dict_from_file(path_output_NLU, interval=5)
     else:
         print("No job number found in NLU output. Exiting the pipeline.")
@@ -115,6 +101,7 @@ def main():
     
     print("\n\n----------------------------------------NLU output----------------------------------------\n")
     print(dict_str_out_NLU)
+    print("\n------------------------------------------------------------------------------------------\n")
 
     if path_output_NLU:
         output_DM = run_bash_script(bash_script_path, DM_prompt_path, path_output_NLU)
@@ -124,7 +111,7 @@ def main():
         path_output_DM = None  
         if job_number:
             path_output_DM = os.path.join(os.path.dirname(__file__), f'hmd_example-{job_number}.out')
-            
+            print(f"Checking DM component's output... (on job {job_number})")
             dict_str_out_DM = extract_dict_from_file(path_output_DM, interval=5)
         else:
             print("No job number found in DM output. Exiting the pipeline.")
@@ -132,15 +119,19 @@ def main():
         
         print("\n\n----------------------------------------DM output----------------------------------------\n")
         print(dict_str_out_DM)    
+        print("\n-----------------------------------------------------------------------------------------\n")
+
 
         if path_output_DM:
             output_NLG = run_bash_script(bash_script_path, NLG_prompt_path, path_output_DM)
-            print("\n\n----------------------------------------NLG output----------------------------------------\n")
-            job_number = search_output(output_DM)
-            path_output_NLG = os.path.join(os.path.dirname(__file__), f'hmd_example-{job_number}.out')
+            job_number2 = search_output(output_NLG)
+            path_output_NLG = os.path.join(os.path.dirname(__file__), f'hmd_example-{job_number2}.out')
+            print(f"Checking NLG component's output... (on job {job_number2})")
             final_question = extract_final_question(path_output_NLG)
 
-            print(f"\n\n[NLG output] --> \"{final_question}\"")
+            print("\n\n----------------------------------------NLG output----------------------------------------\n")
+            print(final_question)
+            print("\n-----------------------------------------------------------------------------------------\n")
 
         else:
             print("No valid DM output to proceed with NLG.")
