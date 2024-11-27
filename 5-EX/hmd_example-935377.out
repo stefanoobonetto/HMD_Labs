@@ -1,0 +1,11 @@
+{
+    "NLU": {
+        "intent": "ramen_ordering",
+        "slots": {
+            "broth": null,
+            "spaghetti_type": "wheat",
+            "egg": "yes",
+            "seaweed": "yes"
+        }
+    }
+}

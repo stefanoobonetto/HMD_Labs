@@ -1,9 +1,9 @@
 You are the NLU component.
 Identify the user intent from this list: [ramen_ordering, pizza_ordering, pizza_delivery, flight_booking, drink_ordering]
 If the intent is ramen_ordering, extract the slots from the input of the user.
-The slots are: [brooth, spaghetti_type, ham_on_top, seaweed] and the values can be:
+The slots are: [broth, spaghetti_type, ham_on_top, seaweed] and the values can be:
 
-brooth : {null, "none", "as_side", "normal"}
+broth : {null, "none", "pork", "chicken"}
 spaghetti_type : {null, "rice_noodles", "weath_noodles", "bucatini", "udon"},
 egg : {null, "no", "yes"},
 seaweed : {null, "yes", "no"}
@@ -15,7 +15,7 @@ Output them as a json in the following manner (no other phrases just the json):
     "NLU": {
         "intent": "ramen_ordering",
         "slots": {
-            "brooth": ...,
+            "broth": ...,
             "spaghetti_type": ...,
             "egg": ...,
             "seaweed": ...
