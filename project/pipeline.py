@@ -3,7 +3,7 @@ from utils import *
 from dict_manager import DictManager
 
 if __name__ == "__main__":
-    dict_manager = DictManager()
+    dict_status = DictManager()
     model_query = ModelQuery()
 
     try:
@@ -15,9 +15,12 @@ if __name__ == "__main__":
             system_prompt=PROMPT_NLU,
             input_file=USER_INPUT
         )
-        print("\n\nNLU response:\n\n", response_NLU)
         
-        dict_manager.validate_dict(response_NLU)
+        print("\n\n----------------------------------------NLU output----------------------------------------\n")
+        print(response_NLU)
+        print("\n------------------------------------------------------------------------------------------\n")
+        
+        dict_status.validate_dict(response_NLU)
     except Exception as e:
         print(f"Error occurred during NLU: {e}")
         exit()
@@ -29,22 +32,29 @@ if __name__ == "__main__":
             # Step 2: DM - Get the next best action
             response_DM = model_query.query_model(
                 system_prompt=PROMPT_DM,
-                input_file=dict_manager.to_json()  
+                input_file=dict_status.to_json()  
             )
-            print("\n\nDM response:\n\n", response_DM)
 
-            dict_manager.validate_dict(response_DM)
+            print("\n\n----------------------------------------DM output----------------------------------------\n")
+            print(response_DM)
+            print("\n------------------------------------------------------------------------------------------\n")
+            
+            dict_status.validate_dict(response_DM)
 
-            next_best_action = dict_manager.get_next_best_action()
+            next_best_action = dict_status.get_next_best_action()
             # print("\n\nNext best action:\n\n", next_best_action)
 
             if next_best_action.startswith("confirmation"):
                 # Step 3: NLG - Generate confirmation message
                 response_NLG = model_query.query_model(
                     system_prompt=PROMPT_NLG,
-                    input_file=dict_manager.to_json()
+                    input_file=dict_status.to_json()
                 )
-                print("\n\nNLG response:\n\n", response_NLG)
+                
+                print("\n\n----------------------------------------NLG output----------------------------------------\n")
+                print(response_NLG)
+                print("\n------------------------------------------------------------------------------------------\n")
+        
 
                 # Display confirmation and exit the loop
                 user_input = input(f"{response_NLG} [yes/no]: ").strip().lower()
@@ -58,19 +68,22 @@ if __name__ == "__main__":
             elif next_best_action.startswith("request_info"):
                 slot_to_fill = next_best_action.split('(')[-1].strip(')')
 
-                if dict_manager.get_slot_value(slot_to_fill) in (None, "null"):
+                if dict_status.get_slot_value(slot_to_fill) in (None, "null"):
                     # Ask user for the required information
                     response_NLG = model_query.query_model(
                         system_prompt=PROMPT_NLG,
-                        input_file=dict_manager.to_json()
+                        input_file=dict_status.to_json()
                     )
-                    print("\n\nNLG response:\n\n")
-
+                    print("\n\n----------------------------------------NLG output----------------------------------------\n")
                     user_input = input(response_NLG).strip()
+                    print("\n------------------------------------------------------------------------------------------\n")
+            
+
+
 
                     # Step 4: Pass user's input to DM to update json dictionary with the new slot value 
                     update_slot_prompt = (
-                        f"Given the previous dictionary: {dict_manager.to_json()}, "
+                        f"Given the previous dictionary: {dict_status.to_json()}, "
                         f"update the slot '{slot_to_fill}' value based on the user input. "
                         "Consider the following valid values for the slots:\n\n"
                         "broth: {null, \"none\", \"pork\", \"chicken\"}\n"
@@ -88,7 +101,7 @@ if __name__ == "__main__":
 
                     # print("\n\nDM update response:\n\n", response_DM_update)
 
-                    dict_manager.validate_dict(response_DM_update)
+                    dict_status.validate_dict(response_DM_update)
 
             else:
                 print("Unhandled next_best_action. Exiting dialogue.")
