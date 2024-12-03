@@ -3,6 +3,7 @@ from utils import *
 from dict_manager import DictManager
 
 if __name__ == "__main__":
+    
     dict_status = DictManager()
     model_query = ModelQuery()
 
