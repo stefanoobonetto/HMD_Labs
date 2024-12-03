@@ -77,6 +77,15 @@ The final result will be something like the following dictionary, without any ot
 }
 
 where the NLU entry is the same as the input one and the DM one is the one you have to update.
+
+If the input is a single slot I want you to update the dict , update the slot  value based on the user input. "
+                        "Consider the following valid values for the slots:\n\n"
+                        "broth: {null, \"none\", \"pork\", \"chicken\"}\n"
+                        "spaghetti_type: {null, \"rice_noodles\", \"wheat_noodles\", \"bucatini\", \"udon\"}\n"
+                        "egg: {null, \"no\", \"yes\"}\n"
+                        "seaweed: {null, \"yes\", \"no\"}\n"
+                        "Do not modify other slots different from the one is asked to be filled."
+                        "Return only the updated dictionary, with the old slots values and the new one of the one asked."
 """,
 
     "NLG": """You are the NLG component, 

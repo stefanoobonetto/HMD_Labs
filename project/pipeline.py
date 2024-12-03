@@ -1,116 +1,89 @@
-from model_query import ModelQuery
-from utils import *
-from dict_manager import DictManager
+import argparse
+from argparse import Namespace
+
+import torch
+
+from utils import load_model, generate, MODELS, TEMPLATES, PROMPTS
+
+
+def get_args() -> Namespace:
+    parser = argparse.ArgumentParser(
+        prog="python -m query_model",
+        description="Query a specific model with a given input.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+
+    parser.add_argument(
+        "model_name",
+        type=str,
+        choices=list(MODELS.keys()),
+        help="The model to query.",
+    )
+    parser.add_argument(
+        "--device",
+        type=str,
+        default="cuda" if torch.cuda.is_available() else "cpu",
+        help="The device to use for the model.",
+    )
+    parser.add_argument(
+        "--parallel",
+        action="store_true",
+        help="Split the model across multiple devices.",
+    )
+    parser.add_argument(
+        "--dtype",
+        type=str,
+        choices=["f32", "bf16"],
+        default="bf16",
+        help="The data type to use for the model.",
+    )
+    parser.add_argument(
+        "--max-new-tokens",
+        type=int,
+        default=128,
+        help="The maximum sequence length to use for the model.",
+    )
+
+    parsed_args = parser.parse_args()
+    parsed_args.chat_template = TEMPLATES[parsed_args.model_name]
+    parsed_args.model_name = MODELS[parsed_args.model_name]
+
+    return parsed_args
+
+def main():
+    args = get_args()
+    model, tokenizer = load_model(args)
+
+    # exit the loop using CTRL+C
+    while True:
+        # function to wait for the user input
+        user_input = input("User: ")
+
+        # get the NLU output
+        nlu_text = args.chat_template.format(PROMPTS["NLU"], user_input)
+        nlu_input = tokenizer(nlu_text, return_tensors="pt").to(model.device)
+        nlu_output = generate(model, nlu_input, tokenizer, args)
+        print(f"NLU: {nlu_output}")
+
+        # Optional Pre-Processing for DM
+        nlu_output = nlu_output.strip()
+
+        # get the DM output
+        dm_text = args.chat_template.format(PROMPTS["DM"], nlu_output)
+        dm_input = tokenizer(dm_text, return_tensors="pt").to(model.device)
+        dm_output = generate(model, dm_input, tokenizer, args)
+        print(f"DM: {dm_output}")
+
+        # Optional Pre-Processing for NLG
+        dm_output = dm_output.strip()
+
+        # get the NLG output
+        nlg_text = args.chat_template.format(PROMPTS["NLG"], dm_output)
+        nlg_input = tokenizer(nlg_text, return_tensors="pt").to(model.device)
+        nlg_output = generate(model, nlg_input, tokenizer, args)
+
+        print(f"NLG: {nlg_output}")
+
 
 if __name__ == "__main__":
-    
-    dict_status = DictManager()
-    model_query = ModelQuery()
-
-    try:
-        
-        print("\n\n\nWelcome to the Ramen Ordering System!\n\n\n")
-
-        # Step 1: NLU - Parse initial user input
-        response_NLU = model_query.query_model(
-            system_prompt=PROMPT_NLU,
-            input_file=USER_INPUT
-        )
-        
-        print("\n\n----------------------------------------NLU output----------------------------------------\n")
-        print(response_NLU)
-        print("\n------------------------------------------------------------------------------------------\n")
-        
-        dict_status.validate_dict(response_NLU)
-    except Exception as e:
-        print(f"Error occurred during NLU: {e}")
-        exit()
-
-    confirmation_received = False
-
-    while not confirmation_received:
-        try:
-            # Step 2: DM - Get the next best action
-            response_DM = model_query.query_model(
-                system_prompt=PROMPT_DM,
-                input_file=dict_status.to_json()  
-            )
-
-            print("\n\n----------------------------------------DM output----------------------------------------\n")
-            print(response_DM)
-            print("\n------------------------------------------------------------------------------------------\n")
-            
-            dict_status.validate_dict(response_DM)
-
-            next_best_action = dict_status.get_next_best_action()
-            # print("\n\nNext best action:\n\n", next_best_action)
-
-            if next_best_action.startswith("confirmation"):
-                
-                
-                print("\n\n-------> confirming with dictionary status: ", dict_status.to_json(), "\n\n\n")
-                # Step 3: NLG - Generate confirmation message
-                response_NLG = model_query.query_model(
-                    system_prompt=PROMPT_NLG,
-                    input_file=dict_status.to_json()
-                )
-                
-                print("\n\n----------------------------------------NLG output----------------------------------------\n")
-                print(response_NLG)
-                print("\n------------------------------------------------------------------------------------------\n")
-        
-
-                # Display confirmation and exit the loop
-                user_input = input(f"{response_NLG} [yes/no]: ").strip().lower()
-                if user_input == "yes":
-                    print("Order confirmed. Exiting dialogue.")
-                    confirmation_received = True
-                else:
-                    print("Order not confirmed. Exiting dialogue.")
-                    exit()
-
-            elif next_best_action.startswith("request_info"):
-                slot_to_fill = next_best_action.split('(')[-1].strip(')')
-
-                if dict_status.get_slot_value(slot_to_fill) in (None, "null"):
-                    # Ask user for the required information
-                    response_NLG = model_query.query_model(
-                        system_prompt=PROMPT_NLG,
-                        input_file=dict_status.to_json()
-                    )
-                    print("\n\n----------------------------------------NLG output----------------------------------------\n")
-                    user_input = input(response_NLG).strip()
-                    print("\n------------------------------------------------------------------------------------------\n")
-            
-
-
-
-                    # Step 4: Pass user's input to DM to update json dictionary with the new slot value 
-                    update_slot_prompt = (
-                        f"Given the previous dictionary: {dict_status.to_json()}, "
-                        f"update the slot '{slot_to_fill}' value based on the user input. "
-                        "Consider the following valid values for the slots:\n\n"
-                        "broth: {null, \"none\", \"pork\", \"chicken\"}\n"
-                        "spaghetti_type: {null, \"rice_noodles\", \"wheat_noodles\", \"bucatini\", \"udon\"}\n"
-                        "egg: {null, \"no\", \"yes\"}\n"
-                        "seaweed: {null, \"yes\", \"no\"}\n"
-                        "Do not modify other slots different from the one is asked to be filled."
-                        "Return only the updated dictionary, with the old slots values and the new one of the one asked."
-                    )
-
-                    response_DM_update = model_query.query_model(
-                        system_prompt=update_slot_prompt,
-                        input_file=user_input
-                    )
-
-                    # print("\n\nDM update response:\n\n", response_DM_update)
-
-                    dict_status.validate_dict(response_DM_update)
-
-            else:
-                print("Unhandled next_best_action. Exiting dialogue.")
-                exit()
-
-        except Exception as e:
-            print(f"Error occurred during DM or NLG: {e}")
-            exit()
+    main()
