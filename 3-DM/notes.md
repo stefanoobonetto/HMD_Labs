@@ -260,3 +260,50 @@ Now let's build:
 user input --> req_for_info --> confirmation
 
 in an **automatic manner**.
+
+
+# How to improve our pipeline
+
+1. User profile (Managing it in DM component)★★★
+2. Error handling (Still in DM component:★★
+   - list options possible
+   - ask to repeat)
+3. Fallback policy (Still in DM component, OutOfDomain requests es. ramen ordering and ask for burger) ★★★
+4. Engagement ★★
+5. Mixed-inizitiative ★★★
+6. Coherence (user issue) ★★
+7. Confirmation ★★
+8. Conversational markers ★★★
+9. Multiple food ordering ★
+
+## 5. Mixed-inizitiative ★★★
+
+Segment the phrase semanthically then go intent classification
+
+
+I want to order a burger / does it comes with fries?
+
+- 1-  chunking phrase 2 - intent classfication 3 - slot filling for each intent
+- 1 - intent classfication 2 - slot filling for each intent
+
+in general we want to rank intent and system actions.
+
+e.g. if an action doesn't require any question to the user we'll do it first
+
+then infos about the food order
+
+then additivo information
+
+---
+
+M: How can I help you today? 
+
+U: I would like to order a salamino pizza, does it come with beer?
+
+M: I am sorry, unfortunately the pizza does not come with a beer. Would you like a normal pizza or a maxi one?
+
+U: I would like a maxi. How spicy is your salamino? Please ddeliver it to my home address?
+
+M: It is the same salamino we use for our "Diavola". Can I please ask you for your home address?
+
+U: 

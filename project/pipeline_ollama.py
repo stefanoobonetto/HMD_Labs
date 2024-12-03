@@ -79,7 +79,7 @@ if __name__ == "__main__":
                         input_file=dict_status.to_json()
                     )
                     print("\n\n----------------------------------------NLG output----------------------------------------\n")
-                    user_input = input(response_NLG).strip()
+                    user_input = input(response_NLG + "\n").strip()
                     print("\n------------------------------------------------------------------------------------------\n")
             
 
