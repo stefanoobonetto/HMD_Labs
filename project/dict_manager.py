@@ -9,7 +9,7 @@ class DictManager:
 
     def validate_dict(self, response):
         """Validate and update dict_status with a new response."""
-        parsed_response = check_response_dict(response)  # Assuming this validates and parses the response
+        parsed_response = check_response_dict(response)  
         self.dict_status.update(parsed_response)
         return self.dict_status
 

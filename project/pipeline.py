@@ -46,6 +46,9 @@ if __name__ == "__main__":
             # print("\n\nNext best action:\n\n", next_best_action)
 
             if next_best_action.startswith("confirmation"):
+                
+                
+                print("\n\n-------> confirming with dictionary status: ", dict_status.to_json(), "\n\n\n")
                 # Step 3: NLG - Generate confirmation message
                 response_NLG = model_query.query_model(
                     system_prompt=PROMPT_NLG,
